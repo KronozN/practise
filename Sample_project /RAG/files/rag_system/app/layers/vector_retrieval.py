@@ -62,7 +62,13 @@ class VectorRetriever:
         metadatas: list[dict[str, Any]] | None = None,
         ids: list[str] | None = None,
     ) -> list[str]:
-        """Embed and upsert documents into ChromaDB."""
+        """Embed and upsert documents into ChromaDB.
+
+        ChromaDB raises:
+            ValueError: Expected metadata to be a non-empty dict, got 0 metadata attributes
+        when ANY metadata dict in the list is empty ({}).
+        Fix: omit the metadatas argument entirely when there is nothing to store.
+        """
         if not documents:
             return []
 
